@@ -27,9 +27,6 @@ jobs:
   publish:
     name: Publish Package to npmjs
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     needs: test-and-lint
     if: github.ref == 'refs/heads/master'
     steps:
@@ -37,15 +34,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@geiserman'
-      - name: Run npm ci
-        run: npm ci
+          registry-url: https://npm.pkg.github.com
+#          scope: '@geiserman'
       - name: Publishing package
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REPO_ACTIONS }}
-
 
   publish-alpha:
     name: Publish alpha to registry
