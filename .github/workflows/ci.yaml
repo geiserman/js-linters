@@ -56,7 +56,7 @@ jobs:
 
       - name: Run Lint
         run: |
-          npm run ${{ env.test_command }} -- ${{ env.test_command_arguments }} --passWithNoTests
+          npm run ${{ env.test_command }} -- ${{ env.test_command_arguments }}
         shell: bash
         working-directory: ${{ env.working_dir }}
 
