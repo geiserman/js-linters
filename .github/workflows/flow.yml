@@ -26,6 +26,9 @@ jobs:
   publish-alpha-to-npmjs:
     name: Publish alpha to npmjs registry
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     if: "contains(github.event.head_commit.message, 'chore(): alpha')"
     steps:
       - uses: actions/checkout@v4
