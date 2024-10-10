@@ -18,27 +18,33 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install deps
         run: npm install
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.PRIVATE_REPO_ACCESS}}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REPO_ACTIONS }}
       - name: Lint
         run: npm run lint
 
 
   publish:
-    name: Publish to registry
+    name: Publish Package to npmjs
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     needs: test-and-lint
     if: github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://npm.pkg.github.com/
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@geiserman'
+      - name: Run npm ci
+        run: npm ci
       - name: Publishing package
         run: npm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.PRIVATE_REPO_ACCESS}}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REPO_ACTIONS }}
 
 
   publish-alpha:
@@ -46,8 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, 'chore(): alpha')"
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
@@ -55,6 +61,8 @@ jobs:
         run: jq '.version = .version + "-alpha.${{github.sha}}"' package.json > tmp.json && mv tmp.json package.json
       - name: Publishing alpha package
         run: npm publish --tag alpha
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.PRIVATE_REPO_ACCESS}}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.REPO_ACTIONS }}
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 

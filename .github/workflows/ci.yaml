@@ -11,6 +11,10 @@ env:
   node_version: '20'
   working_dir: '.'
   node_modules_path: '**/node_modules'
+  test_command: 'lint'
+  test_command_arguments: ''
+  test_reports_path: 'test-results'
+
 
 jobs:
 
@@ -20,24 +24,46 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@main
 
-#      - name: Update NPMRC with Github Token
-#        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PRIVATE_REPO_ACCESS }}" >> .npmrc
+      - name: Update NPMRC with Github Token
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.ACTIONS_SECRET }}" >> .npmrc
 
       - name: Set CACHE_KEY env var
         run: echo "CACHE_KEY=${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}"  >> $GITHUB_ENV
 
-      - name: Install dependencies
-        uses: geiserman/cicd-shared-libraries/workflows/node-npm-install@master
+      - name: Use Node.js
+        uses: actions/setup-node@v3
         with:
-          node_version: '20'
-          working_dir: "."
-          node_modules_path: "node_modules"
-          node_modules_cache_key: ${{ env.CACHE_KEY }}
+          node-version: ${{ env.node_version }}
+          registry-url: "https://registry.npmjs.org"
 
-      - name: Run unit tests
-        uses: geiserman/cicd-shared-libraries/workflows/node-run-tests-v2@master
+      - name: Cache node modules
+        id: cache
+        uses: actions/cache@v3
         with:
-          node_version: '20'
-          node_modules_path: "node_modules"
-          node_modules_cache_key: ${{ env.CACHE_KEY }}
-          test_command: "test"
+          path: ${{ env.node_modules_path }}
+
+      - name: Install dependencies
+        run: |
+          npm install
+        shell: bash
+        working-directory: ${{ env.working_dir }}
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.node_modules_path }}
+          key: ${{ env.CACHE_KEY }}
+          fail-on-cache-miss: true
+
+      - name: Run Lint
+        run: |
+          npm run ${{ env.test_command }} -- ${{ env.test_command_arguments }}
+        shell: bash
+        working-directory: ${{ env.working_dir }}
+
+      - name: Upload Test Results
+        if: ${{ env.test_reports_path }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test Results (${{ inputs.shard }} of ${{ inputs.total_shards }})
+          path: ${{ env.test_reports_path }}
