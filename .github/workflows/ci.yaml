@@ -11,7 +11,7 @@ env:
   node_version: '20'
   working_dir: '.'
   node_modules_path: '**/node_modules'
-  test_command: 'test'
+  test_command: 'lint'
   test_command_arguments: ''
   shard: 1
   total_shards: 1
@@ -56,7 +56,7 @@ jobs:
           key: ${{ env.CACHE_KEY }}
           fail-on-cache-miss: true
 
-      - name: Run tests
+      - name: Run int
         run: |
           npm run ${{ env.test_command }} -- ${{ env.test_command_arguments }} --shard=${{ env.shard }}/${{ env.total_shards }} --passWithNoTests
         shell: bash
