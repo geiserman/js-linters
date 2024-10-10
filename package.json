@@ -1,6 +1,6 @@
 {
   "name": "@geiserman/js-linters",
-  "version": "1.0.10",
+  "version": "1.0.15",
   "description": "Configurations that will be used in backend services",
   "scripts": {
     "lint": "eslint ./",
@@ -10,9 +10,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/geiserman/js-linters.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "homepage": "https://github.com/geiserman/js-linters#readme",
   "dependencies": {
