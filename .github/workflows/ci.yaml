@@ -13,8 +13,6 @@ env:
   node_modules_path: '**/node_modules'
   test_command: 'lint'
   test_command_arguments: ''
-  shard: '1'
-  total_shards: '1'
   test_reports_path: 'test-results'
 
 
@@ -56,9 +54,9 @@ jobs:
           key: ${{ env.CACHE_KEY }}
           fail-on-cache-miss: true
 
-      - name: Run int
+      - name: Run Lint
         run: |
-          npm run ${{ env.test_command }} -- ${{ env.test_command_arguments }} --shard=${{ env.shard }}/${{ env.total_shards }} --passWithNoTests
+          npm run ${{ env.test_command }} -- ${{ env.test_command_arguments }} --passWithNoTests
         shell: bash
         working-directory: ${{ env.working_dir }}
 
