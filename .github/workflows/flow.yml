@@ -37,8 +37,8 @@ jobs:
           registry-url: https://npm.pkg.github.com/
       - name: Publishing package
         run: npm publish
-#        env:
-#          NODE_AUTH_TOKEN: ${{secrets.PRIVATE_REPO_ACCESS}}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.PRIVATE_REPO_ACCESS}}
 
 
   publish-alpha:

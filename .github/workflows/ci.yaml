@@ -26,8 +26,8 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@main
 
-#      - name: Update NPMRC with Github Token
-#        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PRIVATE_REPO_ACCESS }}" >> .npmrc
+      - name: Update NPMRC with Github Token
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PRIVATE_REPO_ACCESS }}" >> .npmrc
 
       - name: Set CACHE_KEY env var
         run: echo "CACHE_KEY=${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}"  >> $GITHUB_ENV
