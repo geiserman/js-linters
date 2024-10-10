@@ -64,7 +64,7 @@ jobs:
 
       - name: Upload Test Results
         if: ${{ env.test_reports_path }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Test Results (${{ inputs.shard }} of ${{ inputs.total_shards }})
           path: ${{ env.test_reports_path }}
