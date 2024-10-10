@@ -11,9 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/geiserman/js-linters.git"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "homepage": "https://github.com/geiserman/js-linters#readme",
   "dependencies": {
     "eslint": "~7.24.0",
