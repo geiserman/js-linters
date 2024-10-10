@@ -26,6 +26,9 @@ jobs:
   publish:
     name: Publish package
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs: test-and-lint
     if: github.ref == 'refs/heads/main'
     steps:
@@ -34,8 +37,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://npm.pkg.github.com
+          scope: '@geiserman'
       - name: Publishing package
-        run: npm publish
+        run: npm ci && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REPO_ACTIONS }}
 
@@ -49,10 +53,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           registry-url: https://npm.pkg.github.com/
+          scope: '@geiserman'
       - name: Patching package.json to have commit hash as an alpha version
         run: jq '.version = .version + "-alpha.${{github.sha}}"' package.json > tmp.json && mv tmp.json package.json
       - name: Publishing alpha package
-        run: npm publish --tag alpha
+        run: npm ci && npm publish --tag alpha
         env:
           NODE_AUTH_TOKEN: ${{ secrets.REPO_ACTIONS }}
 
