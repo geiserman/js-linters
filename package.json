@@ -1,6 +1,6 @@
 {
   "name": "@geiserman/js-linters",
-  "version": "1.0.7",
+  "version": "1.0.10",
   "description": "Configurations that will be used in backend services",
   "scripts": {
     "lint": "eslint ./",
