@@ -13,8 +13,8 @@ env:
   node_modules_path: '**/node_modules'
   test_command: 'lint'
   test_command_arguments: ''
-  shard: 1
-  total_shards: 1
+  shard: '1'
+  total_shards: '1'
   test_reports_path: 'test-results'
 
 
