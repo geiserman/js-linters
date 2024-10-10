@@ -19,7 +19,7 @@ jobs:
       - name: Install deps
         run: npm install
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_SECRET }}
       - name: Lint
         run: npm run lint
 
@@ -38,7 +38,7 @@ jobs:
       - name: Publishing package
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_SECRET }}
 
 
   publish-alpha:
@@ -56,5 +56,5 @@ jobs:
       - name: Publishing alpha package
         run: npm publish --tag alpha
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.ACTIONS_SECRET }}
 
