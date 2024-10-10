@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - "**"
+  pull_request:
+    paths:
+      - "**"
+env:
+  node_version: '16.11'
+  working_dir: '.'
+  node_modules_path: '**/node_modules'
+
+jobs:
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@main
+
+#      - name: Update NPMRC with Github Token
+#        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.PRIVATE_REPO_ACCESS }}" >> .npmrc
+
+      - name: Set CACHE_KEY env var
+        run: echo "CACHE_KEY=${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}"  >> $GITHUB_ENV
+
+      - name: Install dependencies
+        uses: geiserman/cicd-shared-libraries/workflows/node-npm-install@master
+        with:
+          node_version: '16.11'
+          working_dir: "."
+          node_modules_path: "node_modules"
+          node_modules_cache_key: ${{ env.CACHE_KEY }}
+
+      - name: Run unit tests
+        uses: geiserman/cicd-shared-libraries/workflows/node-run-tests-v2@master
+        with:
+          node_version: '16.11'
+          node_modules_path: "node_modules"
+          node_modules_cache_key: ${{ env.CACHE_KEY }}
+          test_command: "test"
